@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | zyfauna</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#11291C;
+color:white;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 60px;
+}
+
+.logo{
+color:#A6FC97;
+font-size:22px;
+font-weight:600;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:30px;
+font-size:14px;
+transition:.3s;
+}
+
+nav a:hover{
+color:#A6FC97;
+}
+
+/* MAIN */
+
+.container{
+max-width:700px;
+margin:auto;
+padding:100px 30px;
+text-align:center;
+}
+
+h1{
+font-size:48px;
+margin-bottom:20px;
+}
+
+p{
+color:#cfd8d3;
+font-size:18px;
+margin-bottom:40px;
+}
+
+/* FORM */
+
+form{
+background:#0d2016;
+padding:40px;
+border-radius:18px;
+border:1px solid rgba(25,138,32,.4);
+text-align:left;
+}
+
+label{
+font-size:14px;
+display:block;
+margin-bottom:6px;
+margin-top:18px;
+}
+
+input, textarea{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid rgba(25,138,32,.4);
+background:#11291C;
+color:white;
+font-size:14px;
+}
+
+textarea{
+resize:none;
+height:120px;
+}
+
+button{
+margin-top:25px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#198A20;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#A6FC97;
+color:#11291C;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:30px;
+font-size:12px;
+color:#cfd8d3;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">zyfauna</div>
+
+<nav>
+<a href="index.html">home</a>
+<a href="about.html">about</a>
+<a href="signin.html">sign in</a>
+<a href="contact.html">contact</a>
+</nav>
+
+</header>
+
+<div class="container">
+
+<h1>Contact Us</h1>
+
+<p>
+Have a question, suggestion, or are you a shelter interested in working with zyfauna? We'd love to hear from you.
+</p>
+
+<form>
+
+<label>Name</label>
+<input type="text" placeholder="your name">
+
+<label>Email</label>
+<input type="email" placeholder="your email">
+
+<label>Message</label>
+<textarea placeholder="your message"></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</div>
+
+<footer>
+@ecliqse
+</footer>
+
+</body>
+</html>
