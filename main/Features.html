@@ -1,1 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features | zyfauna</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#11291C;
+color:white;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 60px;
+}
+
+.logo{
+color:#A6FC97;
+font-size:22px;
+font-weight:600;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:30px;
+font-size:14px;
+transition:.3s;
+}
+
+nav a:hover{
+color:#A6FC97;
+}
+
+/* MAIN */
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:100px 30px;
+}
+
+h1{
+font-size:48px;
+margin-bottom:30px;
+}
+
+.section{
+margin-bottom:60px;
+}
+
+.section h2{
+font-size:26px;
+margin-bottom:15px;
+color:#A6FC97;
+}
+
+.section p{
+font-size:18px;
+line-height:1.7;
+color:#cfd8d3;
+}
+
+/* FEATURE CARDS */
+
+.features-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+.feature-card{
+background:#0d2016;
+border:1px solid rgba(25,138,32,.4);
+padding:25px;
+border-radius:16px;
+}
+
+.feature-card h3{
+margin-bottom:10px;
+color:#A6FC97;
+}
+
+/* IMAGE PLACEHOLDER */
+
+.image-box{
+margin-top:30px;
+background:#0d2016;
+border:2px dashed rgba(166,252,151,.4);
+border-radius:16px;
+padding:60px;
+text-align:center;
+color:#cfd8d3;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:30px;
+font-size:12px;
+color:#cfd8d3;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">zyfauna</div>
+
+<nav>
+<a href="index.html">home</a>
+<a href="about.html">about</a>
+<a href="features.html">features</a>
+<a href="signin.html">sign in</a>
+</nav>
+
+</header>
+
+<div class="container">
+
+<h1>Features</h1>
+
+<div class="section">
+<h2>Simplicity First</h2>
+<p>
+zyfauna focuses on making the pet adoption process simple. Instead of filling out different applications for every shelter, adopters can create one profile and apply to multiple pets easily.
+</p>
+</div>
+
+<div class="features-grid">
+
+<div class="feature-card">
+<h3>One Application</h3>
+<p>
+Fill out your adoption profile once and use it everywhere. No more repeating the same forms again and again.
+</p>
+</div>
+
+<div class="feature-card">
+<h3>Apply in One Click</h3>
+<p>
+Visitors can simply press the apply button on a pet they love instead of sending emails or filling out long paperwork.
+</p>
+</div>
+
+<div class="feature-card">
+<h3>No Lost Applications</h3>
+<p>
+Applications are organized directly through zyfauna, so they won't get lost in email inboxes or ignored.
+</p>
+</div>
+
+<div class="feature-card">
+<h3>Better for Shelters</h3>
+<p>
+Shelters receive clear, organized applications and can review adopters faster and more efficiently.
+</p>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Shelter Dashboard</h2>
+
+<p>
+Shelters get access to a simple dashboard where they can view adoption requests, review applicant profiles, and manage their animals in one place.
+</p>
+
+<div class="image-box">
+Place a screenshot of the shelter interface here
+<br><br>
+Example file: shelter-dashboard.png
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Easy for Visitors</h2>
+
+<p>
+Visitors browsing pets can quickly view available animals and apply instantly. Instead of filling out multiple forms that may never be reviewed, zyfauna keeps everything organized in one system.
+</p>
+
+</div>
+
+</div>
+
+<footer>
+@ecliqse
+</footer>
+
+</body>
+</html>
