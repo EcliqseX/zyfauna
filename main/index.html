@@ -1,153 +1,296 @@
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>zyfauna</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-export default function ZyfaunaHome() {
-  const previewPets = [
-    { name: "Luna", type: "Golden Retriever" },
-    { name: "Milo", type: "Tabby Cat" },
-    { name: "Bella", type: "Mixed Breed" },
-    { name: "Oliver", type: "British Shorthair" },
-  ];
+<style>
 
-  return (
-    <div className="min-h-screen bg-[#11291C] text-white font-sans">
-
-      {/* Header */}
-      <header className="flex justify-between items-center px-12 py-6">
-        <h1 className="text-2xl font-semibold text-[#A6FC97] tracking-wide">
-          ZyFauna
-        </h1>
-
-        <nav className="space-x-10 text-sm">
-          <a href="#about" className="hover:text-[#A6FC97] transition">About</a>
-          <a href="#features" className="hover:text-[#A6FC97] transition">Features</a>
-          <a href="#signin" className="hover:text-[#A6FC97] transition">Sign In</a>
-          <a href="#contact" className="hover:text-[#A6FC97] transition">Contact</a>
-        </nav>
-      </header>
-
-      {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center px-6 pt-32 pb-32">
-
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-6xl font-bold max-w-4xl leading-tight"
-        >
-          One Profile.
-          <br />
-          Apply to Any Pet.
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          className="mt-8 text-lg text-white/70 max-w-2xl"
-        >
-          ZyFauna simplifies pet adoption. Create one universal adoption
-          application and apply to pets across multiple shelters without
-          filling out the same forms again and again.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="mt-12 flex gap-6"
-        >
-          <Button className="bg-[#198A20] hover:bg-[#A6FC97] hover:text-[#11291C] px-10 py-5 rounded-2xl text-base shadow-lg">
-            Get Started
-          </Button>
-
-          <Button className="border border-[#A6FC97] text-[#A6FC97] hover:bg-[#A6FC97] hover:text-[#11291C] px-10 py-5 rounded-2xl text-base">
-            Browse Pets
-          </Button>
-        </motion.div>
-
-      </section>
-
-      {/* Preview Pets Section */}
-      <section className="px-12 pb-28 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-semibold text-center mb-16">
-          Discover Pets Waiting For Homes
-        </h2>
-
-        <div className="grid md:grid-cols-4 gap-8">
-          {previewPets.map((pet, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-[#0d2016] border border-[#198A20]/40 rounded-2xl overflow-hidden hover:scale-[1.03] transition"
-            >
-              <div className="h-44 bg-[#163626]" />
-
-              <div className="p-6">
-                <h3 className="text-lg font-semibold">{pet.name}</h3>
-                <p className="text-sm text-white/60 mt-1">{pet.type}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section id="features" className="px-12 pb-32">
-        <h2 className="text-3xl font-semibold text-center mb-20">
-          Why ZyFauna
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-
-          {[{
-            title: "Universal Adoption Profile",
-            text: "Create one application with your housing, pet history, and references. Use it everywhere.",
-          },{
-            title: "Apply Instantly",
-            text: "Send your profile to multiple shelters with a single click.",
-          },{
-            title: "Built For Shelters",
-            text: "Shelters receive clean, organized applications through email or dashboard tools.",
-          }].map((f, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.2 }}
-              className="bg-[#0d2016] p-8 rounded-2xl border border-[#198A20]/40"
-            >
-              <h3 className="text-xl font-semibold text-[#A6FC97]">
-                {f.title}
-              </h3>
-
-              <p className="text-white/70 mt-4 text-sm">
-                {f.text}
-              </p>
-            </motion.div>
-          ))}
-
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="text-center pb-28">
-        <h2 className="text-3xl font-semibold">
-          Ready to simplify pet adoption?
-        </h2>
-
-        <Button className="mt-10 bg-[#198A20] hover:bg-[#A6FC97] hover:text-[#11291C] px-12 py-6 rounded-2xl text-lg shadow-lg">
-          Create Your Adoption Profile
-        </Button>
-      </section>
-
-      {/* Footer */}
-      <footer className="text-center py-6 text-xs text-white/70">
-        @ecliqse
-      </footer>
-
-    </div>
-  );
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
 }
+
+body{
+background:#11291C;
+color:white;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 60px;
+}
+
+.logo{
+color:#A6FC97;
+font-size:22px;
+font-weight:600;
+letter-spacing:1px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:30px;
+font-size:14px;
+transition:.3s;
+}
+
+nav a:hover{
+color:#A6FC97;
+}
+
+.hero{
+text-align:center;
+padding:120px 20px;
+animation:fadeUp 1s ease;
+}
+
+.hero h1{
+font-size:60px;
+line-height:1.2;
+margin-bottom:25px;
+}
+
+.hero p{
+color:#cfd8d3;
+max-width:650px;
+margin:auto;
+font-size:18px;
+}
+
+.buttons{
+margin-top:40px;
+}
+
+.btn{
+padding:16px 32px;
+border-radius:14px;
+border:none;
+font-size:16px;
+cursor:pointer;
+margin:10px;
+transition:.3s;
+}
+
+.primary{
+background:#198A20;
+color:white;
+}
+
+.primary:hover{
+background:#A6FC97;
+color:#11291C;
+}
+
+.outline{
+background:transparent;
+border:1px solid #A6FC97;
+color:#A6FC97;
+}
+
+.outline:hover{
+background:#A6FC97;
+color:#11291C;
+}
+
+.section{
+padding:80px 60px;
+max-width:1200px;
+margin:auto;
+}
+
+.section h2{
+text-align:center;
+font-size:32px;
+margin-bottom:60px;
+}
+
+.pet-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+}
+
+.card{
+background:#0d2016;
+border:1px solid rgba(25,138,32,.4);
+border-radius:18px;
+overflow:hidden;
+transition:.35s;
+}
+
+.card:hover{
+transform:translateY(-6px) scale(1.02);
+}
+
+.pet-img{
+height:160px;
+background:#163626;
+}
+
+.card-body{
+padding:20px;
+}
+
+.card-body h3{
+font-size:18px;
+margin-bottom:4px;
+}
+
+.card-body p{
+font-size:14px;
+color:#a7b5ae;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+}
+
+.feature{
+background:#0d2016;
+padding:28px;
+border-radius:18px;
+border:1px solid rgba(25,138,32,.4);
+}
+
+.feature h3{
+color:#A6FC97;
+margin-bottom:10px;
+}
+
+.feature p{
+color:#cfd8d3;
+font-size:14px;
+}
+
+.cta{
+text-align:center;
+padding:100px 20px;
+}
+
+footer{
+text-align:center;
+padding:20px;
+font-size:12px;
+color:#cfd8d3;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(30px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">zyfauna</div>
+
+<nav>
+<a href="#">about</a>
+<a href="#">features</a>
+<a href="signin.html">sign in</a>
+<a href="#">contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<h1>one profile.<br>apply to any pet.</h1>
+
+<p>
+zyfauna simplifies pet adoption. create one universal adoption application
+and apply to pets across multiple shelters without repeating forms.
+</p>
+
+<div class="buttons">
+<button class="btn primary">get started</button>
+<button class="btn outline">browse pets</button>
+</div>
+
+</section>
+
+<section class="section">
+<h2>discover pets waiting for homes</h2>
+
+<div class="pet-grid">
+
+<div class="card">
+<div class="pet-img"></div>
+<div class="card-body">
+<h3>luna</h3>
+<p>golden retriever</p>
+</div>
+</div>
+
+<div class="card">
+<div class="pet-img"></div>
+<div class="card-body">
+<h3>milo</h3>
+<p>tabby cat</p>
+</div>
+</div>
+
+<div class="card">
+<div class="pet-img"></div>
+<div class="card-body">
+<h3>bella</h3>
+<p>mixed breed</p>
+</div>
+</div>
+
+<div class="card">
+<div class="pet-img"></div>
+<div class="card-body">
+<h3>oliver</h3>
+<p>british shorthair</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<h2>why zyfauna</h2>
+
+<div class="features">
+
+<div class="feature">
+<h3>universal adoption profile</h3>
+<p>create one application with your housing, pet history, and references and use it everywhere.</p>
+</div>
+
+<div class="feature">
+<h3>apply instantly</h3>
+<p>send your profile to multiple shelters with a single click.</p>
+</div>
+
+<div class="feature">
+<h3>built for shelters</h3>
+<p>shelters receive organized applications through email or dashboards.</p>
+</div>
+
+</div>
+</section>
+
+<section class="cta">
+<h2>ready to simplify pet adoption?</h2>
+<button class="btn primary">create your adoption profile</button>
+</section>
+
+<footer>
+@ecliqse
+</footer>
+
+</body>
+</html>
