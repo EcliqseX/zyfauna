@@ -1,0 +1,153 @@
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+
+export default function ZyfaunaHome() {
+  const previewPets = [
+    { name: "Luna", type: "Golden Retriever" },
+    { name: "Milo", type: "Tabby Cat" },
+    { name: "Bella", type: "Mixed Breed" },
+    { name: "Oliver", type: "British Shorthair" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#11291C] text-white font-sans">
+
+      {/* Header */}
+      <header className="flex justify-between items-center px-12 py-6">
+        <h1 className="text-2xl font-semibold text-[#A6FC97] tracking-wide">
+          ZyFauna
+        </h1>
+
+        <nav className="space-x-10 text-sm">
+          <a href="#about" className="hover:text-[#A6FC97] transition">About</a>
+          <a href="#features" className="hover:text-[#A6FC97] transition">Features</a>
+          <a href="#signin" className="hover:text-[#A6FC97] transition">Sign In</a>
+          <a href="#contact" className="hover:text-[#A6FC97] transition">Contact</a>
+        </nav>
+      </header>
+
+      {/* Hero Section */}
+      <section className="flex flex-col items-center justify-center text-center px-6 pt-32 pb-32">
+
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-6xl font-bold max-w-4xl leading-tight"
+        >
+          One Profile.
+          <br />
+          Apply to Any Pet.
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="mt-8 text-lg text-white/70 max-w-2xl"
+        >
+          ZyFauna simplifies pet adoption. Create one universal adoption
+          application and apply to pets across multiple shelters without
+          filling out the same forms again and again.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="mt-12 flex gap-6"
+        >
+          <Button className="bg-[#198A20] hover:bg-[#A6FC97] hover:text-[#11291C] px-10 py-5 rounded-2xl text-base shadow-lg">
+            Get Started
+          </Button>
+
+          <Button className="border border-[#A6FC97] text-[#A6FC97] hover:bg-[#A6FC97] hover:text-[#11291C] px-10 py-5 rounded-2xl text-base">
+            Browse Pets
+          </Button>
+        </motion.div>
+
+      </section>
+
+      {/* Preview Pets Section */}
+      <section className="px-12 pb-28 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-semibold text-center mb-16">
+          Discover Pets Waiting For Homes
+        </h2>
+
+        <div className="grid md:grid-cols-4 gap-8">
+          {previewPets.map((pet, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="bg-[#0d2016] border border-[#198A20]/40 rounded-2xl overflow-hidden hover:scale-[1.03] transition"
+            >
+              <div className="h-44 bg-[#163626]" />
+
+              <div className="p-6">
+                <h3 className="text-lg font-semibold">{pet.name}</h3>
+                <p className="text-sm text-white/60 mt-1">{pet.type}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="px-12 pb-32">
+        <h2 className="text-3xl font-semibold text-center mb-20">
+          Why ZyFauna
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+
+          {[{
+            title: "Universal Adoption Profile",
+            text: "Create one application with your housing, pet history, and references. Use it everywhere.",
+          },{
+            title: "Apply Instantly",
+            text: "Send your profile to multiple shelters with a single click.",
+          },{
+            title: "Built For Shelters",
+            text: "Shelters receive clean, organized applications through email or dashboard tools.",
+          }].map((f, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.2 }}
+              className="bg-[#0d2016] p-8 rounded-2xl border border-[#198A20]/40"
+            >
+              <h3 className="text-xl font-semibold text-[#A6FC97]">
+                {f.title}
+              </h3>
+
+              <p className="text-white/70 mt-4 text-sm">
+                {f.text}
+              </p>
+            </motion.div>
+          ))}
+
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="text-center pb-28">
+        <h2 className="text-3xl font-semibold">
+          Ready to simplify pet adoption?
+        </h2>
+
+        <Button className="mt-10 bg-[#198A20] hover:bg-[#A6FC97] hover:text-[#11291C] px-12 py-6 rounded-2xl text-lg shadow-lg">
+          Create Your Adoption Profile
+        </Button>
+      </section>
+
+      {/* Footer */}
+      <footer className="text-center py-6 text-xs text-white/70">
+        @ecliqse
+      </footer>
+
+    </div>
+  );
+}
