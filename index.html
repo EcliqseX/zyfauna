@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zyfauna: one application, every animal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16243b;--paper:#eef2f6;--card:#fff;--mute:#566679;--line:#16243b;--ball:#d3e24a;--on-ball:#16243b}
+@media (prefers-color-scheme:dark){:root{--ink:#e8eef6;--paper:#0f1a2b;--card:#172640;--mute:#9db0c6;--line:#c9d6e6}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.55 Figtree,system-ui,sans-serif}
+h1,h2,h3,.brand{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;line-height:1.1;margin:0}
+h1{font-size:clamp(2.3rem,7vw,4.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.9rem;font-weight:800;margin-bottom:8px}h3{font-size:1.25rem;font-weight:600}
+a{color:inherit}:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+header{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;padding:16px clamp(16px,4vw,48px);border-bottom:2px solid var(--line)}
+.brand{font-size:1.5rem;font-weight:800;text-decoration:none;margin-right:auto}
+nav{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+nav a,nav button{text-decoration:none;font:600 1rem Figtree,sans-serif;padding:4px 0;border:0;border-bottom:3px solid transparent;background:none;color:var(--ink);cursor:pointer}
+nav a.on{border-color:var(--ball)}
+main{padding:clamp(20px,4vw,48px);max-width:1100px;margin:0 auto}
+footer{padding:24px clamp(16px,4vw,48px);color:var(--mute);border-top:2px solid var(--line);font-size:.9rem}
+.hero{display:grid;gap:28px;grid-template-columns:1.2fr 1fr;align-items:center;padding:20px 0}
+.hero p{font-size:1.15rem;max-width:34em;margin:18px 0 24px}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:10px 18px;font:600 1rem Figtree,sans-serif;text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:12px 0}
+.panel,.item,fieldset,.dog{border:2px solid var(--line);border-radius:10px;background:var(--card)}
+.panel{padding:22px}.panel p{margin:8px 0 16px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:22px;margin-top:18px}
+.dog{padding:38px 20px 20px;position:relative;display:flex;flex-direction:column;gap:6px}
+.dog::before{content:"";position:absolute;top:11px;left:50%;width:13px;height:13px;margin-left:-7px;border-radius:50%;border:2px solid var(--line);background:var(--paper)}
+.dog .btn{margin-top:auto;align-self:flex-start}.dog p{margin:0}
+.score{position:absolute;top:-2px;right:14px;background:var(--ball);color:var(--on-ball);border:2px solid var(--line);border-top:0;border-radius:0 0 10px 10px;padding:4px 10px;font-weight:800}
+.meta{color:var(--mute);margin:0;font-size:.95rem}
+.note{border:2px dashed var(--line);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.95rem}
+fieldset{margin:20px 0;padding:8px 20px 20px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:10px}
+label{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.95rem}
+input,select,textarea{font:400 1rem Figtree,sans-serif;padding:9px 10px;border:2px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}
+textarea{min-height:90px}
+label.chk{flex-direction:row;align-items:center;gap:10px;font-weight:400}
+input[type=checkbox]{width:20px;height:20px}
+.item{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 18px;margin-top:12px}
+.sug{background:var(--ball);color:var(--on-ball);border-radius:99px;padding:1px 10px;font-size:.85rem;font-weight:600}
+details{border:2px solid var(--line);border-radius:10px;background:var(--card);padding:12px 18px;margin-top:12px}
+summary{cursor:pointer;font-weight:600}dt{font-weight:600;margin-top:10px}dd{margin:2px 0 0;color:var(--mute)}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+#toast.show{opacity:1}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a class="brand" href="#home">Zyfauna</a><nav id="nav" aria-label="Main"></nav></header>
+<main id="app"></main>
+<footer>Demo mode: accounts and listings are saved only in this browser, so don’t use a real password. Sample shelters are made up.</footer>
+<div id="toast" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* Paste your Supabase project URL and anon key here to turn on the real backend. Leave both empty for demo mode. */
+const SUPA_URL='xhiozdyafiwxclwjkylt',SUPA_KEY='xhiozdyafiwxclwjkylt';
+const LIVE=!!(SUPA_URL&&SUPA_KEY&&window.supabase),sb=LIVE?supabase.createClient(SUPA_URL,SUPA_KEY):null;
+const $=s=>document.querySelector(s),mem={};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CITIES={Houston:[29.76,-95.37],Austin:[30.27,-97.74],Dallas:[32.78,-96.8],'San Antonio':[29.42,-98.49],'Los Angeles':[34.05,-118.24],'New York':[40.71,-74.01],Chicago:[41.88,-87.63],Atlanta:[33.75,-84.39]};
+const ACT=[['','Choose one'],['Relaxed','Relaxed: mostly at home'],['Moderate','Moderate: daily walks'],['Active','Active: runs, hikes, outings']];
+const CORE=[['name','Full name','text'],['email','Email','email'],['phone','Phone','tel'],['household','People in your household','number'],['kids','Children at home (ages, or “none”)','text'],['activity','How active is your family?','select',ACT],['reason','Reason for adopting','textarea'],['ref1','Reference 1: name and phone','text'],['ref2','Reference 2: name and phone','text']];
+const OPT=[['prev','Previous pets and what happened to them','textarea'],['issues','Behavior issues you’re ready to work with','textarea'],['home','Home type, and whether you own or rent','text'],['yard','Fenced yard? (yes or no)','text'],['pets','Other pets at home','text'],['alone','Hours the pet would be alone on a workday','number'],['vet','Veterinarian name and phone','text']];
+const isReq=k=>CORE.some(c=>c[0]===k)||k[0]==='c';
+
+function seed(){
+ const S=(id,name,city)=>({id,role:'shelter',name,city,email:'',emailOn:false,opt:[],custom:[]});
+ const D=(id,s,name,species,breed,age,size,kids,dogs,cats,desc)=>({id,shelterId:s,name,species,breed,age,size,kids,dogs,cats,desc,status:'available'});
+ const o={users:[S('s1','Harbor Paws Rescue','Houston'),S('s2','Bayou City Animals','Houston'),S('s3','Second Chance Rescue','Austin'),S('s4','North Texas Rescue','Dallas')],
+  dogs:[D('d1','s1','Biscuit','Dog','Beagle mix','3 yrs','Medium',1,1,1,'Loves sniff walks and does fine in an apartment.'),
+   D('d2','s1','Pickle','Dog','Terrier mix','1 yr','Small',0,1,0,'Bouncy and funny. Best with older kids or adults.'),
+   D('d3','s2','Moose','Dog','Great Pyrenees','5 yrs','Large',1,1,1,'A calm giant who guards the couch.'),
+   D('d4','s2','Whiskers','Cat','Tabby','2 yrs','Small',1,0,1,'Chatty lap cat who loves window watching.'),
+   D('d5','s3','Maple','Dog','Lab mix','7 yrs','Large',1,1,1,'A gentle senior who loves slow walks.'),
+   D('d6','s4','Pepper','Dog','Shepherd mix','4 yrs','Large',1,0,0,'Loyal and eager to learn. Needs confident handling.')],
+  apps:[],session:null,pref:{city:'Houston',radius:25,species:'All'}};o.dogs[3].t=Date.now()-1728e5;return o}
+function load(){try{return JSON.parse(localStorage.getItem('zf_db'))}catch(e){return mem.db||null}}
+let q=Promise.resolve(),snap={},tm;
+const J=JSON.stringify,DATA=x=>{const{pass,role,approved,id,...d}=x;return d};
+const flush=()=>{clearTimeout(tm);q=q.then(push).catch(()=>toast('Couldn’t save. Check your connection and try again.'));return q};
+function save(){if(!LIVE){try{localStorage.setItem('zf_db',J(db))}catch(e){mem.db=db}return}
+ try{localStorage.setItem('zf_pref',J(db.pref))}catch(e){}
+ clearTimeout(tm);tm=setTimeout(flush,500)}
+async function push(){const m=me();if(!m)return;
+ const want=[['profiles',m.id,DATA(m),null],
+  ...db.dogs.filter(d=>d.shelterId===m.id).map(d=>['dogs',d.id,d,{id:d.id,shelter_id:m.id,data:d}]),
+  ...db.apps.filter(a=>a.adopterId===m.id||a.shelterId===m.id).map(a=>['apps',a.id,a,{id:a.id,adopter_id:a.adopterId,shelter_id:a.shelterId,data:a}])];
+ for(const[t,id,data,ins]of want){const j=J(data);if(snap[t+id]===j)continue;
+  const r=snap[t+id]===undefined&&ins?await sb.from(t).insert(ins):await sb.from(t).update({data}).eq('id',id);
+  if(r.error)throw r.error;snap[t+id]=j}
+ for(const k of Object.keys(snap))if(k.startsWith('dogs')&&!db.dogs.some(d=>'dogs'+d.id===k)){const r=await sb.from('dogs').delete().eq('id',k.slice(4));if(r.error)throw r.error;delete snap[k]}}
+async function pull(){const[p,d,a]=await Promise.all(['profiles','dogs','apps'].map(t=>sb.from(t).select('*')));
+ if(p.error||d.error||a.error)throw new Error('load');snap={};
+ db.users=p.data.map(r=>{snap['profiles'+r.id]=J(r.data);return Object.assign({},r.data,{id:r.id,role:r.role,approved:r.approved})});
+ db.dogs=d.data.map(r=>{snap['dogs'+r.id]=J(r.data);return r.data});
+ db.apps=a.data.map(r=>{snap['apps'+r.id]=J(r.data);return r.data})}
+async function afterAuth(){const{data:{session}}=await sb.auth.getSession();if(!session)return false;const u=session.user;
+ const ex=await sb.from('profiles').select('id').eq('id',u.id).maybeSingle();
+ if(!ex.data){const md=u.user_metadata||{},role=md.role==='shelter'?'shelter':'adopter',base={name:md.name||'',city:md.city||'Houston'};
+  const data=role==='shelter'?{...base,emailOn:false,email:'',opt:[],custom:[]}:{...base,email:u.email,p:{name:md.name||'',email:u.email}};
+  const i=await sb.from('profiles').insert({id:u.id,role,data});if(i.error)throw i.error}
+ db.session=u.id;await pull();const m=me();if(m&&m.role==='adopter'&&m.city){db.pref.city=m.city;delete db.pref.lat;delete db.pref.lon}return true}
+function refresh(){if(!LIVE||!db.session)return;q=flush().then(pull).then(()=>{if(['dogs','dash','apps','myapps'].includes(location.hash.slice(1).split('/')[0]))render()}).catch(()=>{})}
+const pref0=(()=>{try{return JSON.parse(localStorage.getItem('zf_pref'))}catch(e){return null}})()||{city:'Houston',radius:25,species:'All'};
+let db=LIVE?{users:[],dogs:[],apps:[],session:null,pref:pref0}:(load()||seed()),pending=null;
+const isNew=d=>d.t&&Date.now()-d.t<6048e5;
+const me=()=>db.users.find(u=>u.id===db.session),shel=id=>db.users.find(u=>u.id===id),dogOf=id=>db.dogs.find(d=>d.id===id);
+const here=()=>db.pref.lat!=null?[db.pref.lat,db.pref.lon]:CITIES[db.pref.city];
+function dist(a,b){const r=x=>x*Math.PI/180,h=Math.sin(r(b[0]-a[0])/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(r(b[1]-a[1])/2)**2;return 3959*2*Math.asin(Math.sqrt(h))}
+const qlist=S=>CORE.concat(OPT.filter(o=>S.opt.includes(o[0]))).concat(S.custom.map((c,i)=>['c'+i,c,'text']));
+function field([k,l,t,o],v,dis){const a=`data-k="${k}"${dis?' disabled':''}`,L=esc(l)+(isReq(k)?' *':'');
+ if(t==='select')return `<label>${L}<select ${a}>${o.map(([x,y])=>`<option value="${x}"${String(v)===x?' selected':''}>${y}</option>`).join('')}</select></label>`;
+ if(t==='textarea')return `<label style="grid-column:1/-1">${L}<textarea ${a}>${esc(v)}</textarea></label>`;
+ return `<label>${L}<input type="${t}" ${a} value="${esc(v)}"></label>`}
+const card=(d,prev)=>{const s=shel(d.shelterId),g=[d.kids&&'kids',d.dogs&&'dogs',d.cats&&'cats'].filter(Boolean).join(', ')||'ask the shelter';
+ return `<article class="dog"><div class="score">${d.species}</div><h3>${esc(d.name)}${isNew(d)?' <span class="sug">New</span>':''}</h3><p class="meta">${esc(d.breed)}, ${esc(d.age)}, ${d.size}</p><p>${esc(d.desc)}</p><p class="meta">${esc(s.name)}, ${s.city}${prev?'':', '+Math.round(dist(here(),CITIES[s.city]))+' mi away'}</p><p class="meta">Good with: ${g}</p>${prev?'':`<button class="btn" data-act="adopt" data-id="${d.id}">Adopt ${esc(d.name)}</button>`}</article>`};
+const val=id=>($('#'+id)||{}).value||'';
+
+const V={
+home:()=>`<section class="hero"><div><h1>Fill it out once. Adopt with confidence.</h1><p>Adopters answer every shelter’s questions one time. Shelters list animals, choose what they ask, and see every applicant in one dashboard.</p></div>
+ <div class="panel"><h3>I want to adopt</h3><p>Find animals near you and apply in minutes.</p><a class="btn" href="#join/adopter">Sign up as an adopter</a><hr style="margin:22px 0;border:1px dashed var(--line)"><h3>I’m a shelter or rescue</h3><p>List animals and review applications.</p><a class="btn ghost" href="#join/shelter">Sign up as a shelter</a></div></section>
+ <p class="meta">Already have an account? <a href="#login">Log in</a>. Or <a href="#dogs">browse animals</a> first.</p>`,
+
+login:()=>`<h2>Log in</h2>${pending?'<p class="note">Log in or sign up to apply.</p>':''}<div class="panel" style="max-width:440px"><div class="fields" style="grid-template-columns:1fr"><label>Email<input id="li-e" type="email"></label><label>Password<input id="li-p" type="password"></label></div><div class="row"><button class="btn" data-act="login">Log in</button></div><p class="meta">New here? <a href="#join/adopter">Adopter sign up</a> or <a href="#join/shelter">Shelter sign up</a></p></div>`,
+
+join:a=>{const sh=a==='shelter';return `<h2>${sh?'Shelter or rescue sign up':'Adopter sign up'}</h2><div class="panel" style="max-width:440px"><div class="fields" style="grid-template-columns:1fr"><label>${sh?'Organization name':'Full name'}<input id="su-n"></label><label>City<select id="su-c">${Object.keys(CITIES).map(c=>`<option>${c}</option>`).join('')}</select></label><label>Email<input id="su-e" type="email"></label><label>Password (6+ characters)<input id="su-p" type="password"></label></div><div class="row"><button class="btn" data-act="signup" data-id="${sh?'shelter':'adopter'}">Create account</button></div><p class="meta">${sh?'Adopter? <a href="#join/adopter">Sign up here</a>':'Shelter? <a href="#join/shelter">Sign up here</a>'}. Have an account? <a href="#login">Log in</a></p></div>`},
+
+dogs:()=>{const p=db.pref,h=here(),sp=['All','Dog','Cat','Other'];
+ const near=db.users.filter(u=>u.role==='shelter'&&dist(h,CITIES[u.city])<=p.radius).map(u=>({u,m:dist(h,CITIES[u.city])})).sort((a,b)=>a.m-b.m);
+ const ids=near.map(x=>x.u.id),ds=db.dogs.filter(d=>d.status==='available'&&ids.includes(d.shelterId)&&(p.species==='All'||d.species===p.species)).sort((a,b)=>(!!isNew(b)-!!isNew(a))||dist(h,CITIES[shel(a.shelterId).city])-dist(h,CITIES[shel(b.shelterId).city]));
+ return `<h2>Animals near you</h2><div class="row"><label>Location<select id="pc">${p.lat!=null?'<option>My location</option>':''}${Object.keys(CITIES).map(c=>`<option${p.lat==null&&p.city===c?' selected':''}>${c}</option>`).join('')}</select></label><button class="btn ghost" data-act="geo">Use my location</button><label>Distance: <span id="prv">${p.radius} miles</span><input id="pr" type="range" min="5" max="100" step="5" value="${p.radius}"></label><label>Type<select id="ps">${sp.map(s=>`<option${p.species===s?' selected':''}>${s}</option>`).join('')}</select></label></div>
+ <h3>Shelters within ${p.radius} miles</h3><p class="meta">${near.length?near.map(x=>`${esc(x.u.name)} (${Math.round(x.m)} mi, ${db.dogs.filter(d=>d.shelterId===x.u.id&&d.status==='available').length} listed)`).join(' · '):'None yet. Try a larger distance.'}</p>
+ ${ds.length?`<div class="grid">${ds.map(d=>card(d)).join('')}</div>`:'<p class="note">No animals match. Increase the distance or change the type.</p>'}`},
+
+myinfo:()=>{const m=me();return `<h2>My info</h2><p>Saves automatically. Fields marked * are asked by every shelter. Shelters choose which of the other questions they add.</p><div data-auto class="fields">${CORE.concat(OPT).map(q=>field(q,m.p[q[0]]||'')).join('')}</div>`},
+
+apply:(a,b)=>{const d=dogOf(a),m=me();if(!d)return V.dogs();const S=shel(d.shelterId);if((S.blocked||[]).includes(m.id))return '<p class="note">You can’t apply to this shelter.</p>';
+ return `<h2>${b?'Resubmit your application for':'Apply to adopt'} ${esc(d.name)}</h2><p>${b?'Update your answers below. The shelter sees a new submission and the status resets to Pending. ':''}Your application goes to ${esc(S.name)}’s dashboard${S.emailOn&&S.email?' and to their email':''}. Answers come from My info; edit anything. Fields marked * are required.</p><div class="fields" id="appf">${qlist(S).map(q=>field(q,m.p[q[0]]||'')).join('')}</div><div class="row"><button class="btn" data-act="submitapp" data-id="${d.id}" data-app="${b||''}">${b?'Resubmit application':'Send application'}</button><a class="btn ghost" href="#dogs">Cancel</a></div>`},
+
+myapps:()=>{const m=me(),ap=db.apps.filter(a=>a.adopterId===m.id).reverse();
+ return `<h2>My applications</h2>`+(ap.length?ap.map(a=>{const d=dogOf(a.dogId),S=shel(a.shelterId),st=a.status||'Pending',bl=(S.blocked||[]).includes(m.id);
+  return `<div class="item" style="display:block"><div class="row" style="justify-content:space-between;margin:0"><div><h3>${esc(d?d.name:'Removed listing')}</h3><p class="meta">${esc(S.name)}, sent ${new Date(a.t).toLocaleDateString()}${a.emailed?', emailed':''}</p></div><span class="sug">${st}</span></div>
+  ${a.upd?`<div class="note row" style="justify-content:space-between"><span><strong>Update:</strong> ${esc(S.name)} marked this ${st.toLowerCase()}.${a.note?' Message: '+esc(a.note):''}</span><button class="btn ghost" data-act="dismiss" data-id="${a.id}" aria-label="Dismiss notification">×</button></div>`:a.note?`<p><strong>Message from ${esc(S.name)}:</strong> ${esc(a.note)}</p>`:''}
+  <details><summary>View my application</summary><dl>${a.ans.map(([q,v])=>`<dt>${esc(q)}</dt><dd>${esc(v)||'(no answer)'}</dd>`).join('')}</dl></details>
+  ${d&&st!=='Accepted'&&!bl?`<div class="row"><a class="btn ghost" href="#apply/${d.id}/${a.id}">Resubmit application</a></div>`:''}</div>`}).join(''):'<p class="note">Nothing sent yet. <a href="#dogs">Find an animal</a> to apply for.</p>')},
+
+dash:()=>{const m=me(),mine=db.dogs.filter(d=>d.shelterId===m.id).sort((a,b)=>(a.status==='adopted')-(b.status==='adopted')||(b.t||0)-(a.t||0)),ap=db.apps.filter(a=>a.shelterId===m.id&&!(m.blocked||[]).includes(a.adopterId)),nw=ap.filter(a=>!a.seen).length;
+ return `<h2>${esc(m.name)}</h2>${LIVE&&!m.approved?'<p class="note">Your shelter account is waiting for approval. You can set up your questions now, and posting opens once you’re approved.</p>':''}<p>${mine.length} listings, ${ap.length} applications ${nw?`<span class="sug">${nw} new</span>`:''}</p><div class="row"><a class="btn" href="#new">New listing</a><a class="btn ghost" href="#settings">Settings and questions</a></div>`+(mine.length?mine.map(d=>{const n=ap.filter(a=>a.dogId===d.id).length;return `<div class="item"><div><h3>${esc(d.name)}${d.status==='adopted'?' (adopted)':isNew(d)?' <span class="sug">New</span>':''}</h3><p class="meta">${d.species}, ${esc(d.breed)}, ${n} applied, ${ap.filter(a=>a.dogId===d.id&&(a.status||'Pending')==='Pending').length} pending</p></div><div class="row"><a class="btn" href="#apps/${d.id}">See applicants</a><a class="btn ghost" href="#preview/${d.id}">Preview as adopter</a><button class="btn ghost" data-act="status" data-id="${d.id}">${d.status==='adopted'?'Relist':'Mark adopted'}</button><button class="btn ghost" data-act="remove" data-id="${d.id}">Remove</button></div></div>`}).join(''):'<p class="note">No listings yet. Create your first one.</p>')},
+
+apps:a=>{const d=dogOf(a),m=me();if(!d||d.shelterId!==m.id)return V.dash();const ap=db.apps.filter(x=>x.dogId===a&&!(m.blocked||[]).includes(x.adopterId)).reverse();
+ const h=`<p><a href="#dash">Back to dashboard</a></p><h2>${ap.length} applied for ${esc(d.name)}</h2>`+(ap.length?ap.map(x=>`<details><summary>${esc(x.ans[0][1])}, ${new Date(x.t).toLocaleDateString()} <span class="sug">${x.status||'Pending'}</span> ${x.resub?'<span class="sug">Resubmitted</span> ':''}${x.seen?'':'<span class="sug">New</span>'}</summary><dl>${x.ans.map(([q,v])=>`<dt>${esc(q)}</dt><dd>${esc(v)||'(no answer)'}</dd>`).join('')}</dl><div class="row"><label>Decision<select data-ap="${x.id}">${['Pending','Accepted','Waitlist','Rejected'].map(s=>`<option${(x.status||'Pending')===s?' selected':''}>${s}</option>`).join('')}</select></label></div><label>Message to the adopter (optional)<textarea data-an="${x.id}">${esc(x.note)}</textarea></label><div class="row"><button class="btn" data-act="decide" data-id="${x.id}">Save and notify adopter</button><button class="btn ghost" data-act="block" data-id="${x.adopterId}">Block this person</button></div></details>`).join(''):'<p class="note">No applications yet.</p>');
+ ap.forEach(x=>x.seen=true);save();return h},
+
+preview:a=>{const d=dogOf(a),m=me();if(!d||d.shelterId!==m.id)return V.dash();
+ return `<p class="note">Preview: this is what adopters see. <a href="#dash">Back to dashboard</a></p><div class="grid">${card(d,1)}</div><h3 style="margin-top:28px">Application questions adopters answer</h3><div class="fields">${qlist(m).map(q=>field(q,'',1)).join('')}</div>`},
+
+new:()=>`<h2>New listing</h2><div class="fields"><label>Name *<input id="n-n"></label><label>Type<select id="n-t"><option>Dog</option><option>Cat</option><option>Other</option></select></label><label>Breed *<input id="n-b"></label><label>Age<input id="n-a" placeholder="3 yrs"></label><label>Size<select id="n-s"><option>Small</option><option>Medium</option><option>Large</option></select></label></div>
+ <div class="row"><label class="chk"><input type="checkbox" id="n-k">Good with kids</label><label class="chk"><input type="checkbox" id="n-d">Good with dogs</label><label class="chk"><input type="checkbox" id="n-c">Good with cats</label></div>
+ <label>Description<textarea id="n-x"></textarea></label><div class="row"><button class="btn ghost" data-act="draft">Write a draft for me</button><button class="btn" data-act="savedog">Post listing</button></div><p class="meta">Drafts are built from the details above and you can edit them. Writing with a real AI model needs a server key, so that comes later.</p>`,
+
+settings:()=>{const m=me();return `<h2>Settings and questions</h2><div class="fields"><label>Organization name<input id="s-n" value="${esc(m.name)}"></label><label>City<select id="s-c">${Object.keys(CITIES).map(c=>`<option${m.city===c?' selected':''}>${c}</option>`).join('')}</select></label></div>
+ <fieldset><legend><h3>Get applications by email too?</h3></legend><label class="chk"><input type="checkbox" id="s-eo"${m.emailOn?' checked':''}>Also email each application to:</label><label><input id="s-em" type="email" value="${esc(m.email)}" placeholder="adoptions@yourshelter.org"></label><p class="meta">Applications always appear on your dashboard. Leave this off to keep email free for other things.</p></fieldset>
+ <fieldset><legend><h3>Questions adopters answer</h3></legend><p class="meta">Required for everyone: ${CORE.map(c=>c[1]).join('; ')}.</p>${OPT.map(o=>`<label class="chk"><input type="checkbox" data-o="${o[0]}"${m.opt.includes(o[0])?' checked':''}>${o[1]}</label>`).join('')}
+ <h3 style="margin-top:18px">Your own questions</h3>${m.custom.map((c,i)=>`<div class="row"><span>${esc(c)}</span><button class="btn ghost" data-act="delq" data-id="${i}">Remove</button></div>`).join('')}<div class="row"><input id="s-q" placeholder="Add a question" style="flex:1"><button class="btn ghost" data-act="addq">Add</button></div></fieldset><fieldset><legend><h3>Blocked people</h3></legend>${(m.blocked||[]).length?m.blocked.map(id=>`<div class="row"><span>${esc((m.bn||{})[id]||'Unknown')}</span><button class="btn ghost" data-act="unblock" data-id="${id}">Unblock</button></div>`).join(''):'<p class="meta">No one is blocked.</p>'}</fieldset><button class="btn" data-act="saveset">Save settings</button>`}
+};
+
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('show'),2200)}
+const AD=['myinfo','apply','myapps'],SH=['dash','new','apps','settings','preview'];
+function render(){const m=me();let[r,a,b]=(location.hash.slice(1)||'home').split('/');
+ if(!V[r])r='home';
+ if((AD.includes(r)&&(!m||m.role!=='adopter'))||(SH.includes(r)&&(!m||m.role!=='shelter'))){if(r==='apply')pending=location.hash;location.hash='#login';return}
+ $('#app').innerHTML=V[r](a,b);
+ const U=m&&m.role==='adopter'?db.apps.filter(a=>a.adopterId===m.id&&a.upd).length:0;
+ const L=(h,t)=>`<a href="#${h}" class="${r===h?'on':''}">${t}</a>`;
+ $('#nav').innerHTML=!m?L('dogs','Find animals')+L('login','Log in')+L('join/adopter','Sign up'):m.role==='shelter'?L('dash','Dashboard')+L('new','New listing')+L('settings','Settings')+`<button data-act="logout">Log out</button>`:L('dogs','Find animals')+L('myinfo','My info')+L('myapps','My applications'+(U?` <span class="sug">${U}</span>`:''))+`<button data-act="logout">Log out</button>`}
+addEventListener('hashchange',()=>{render();scrollTo(0,0);refresh()});
+
+function collectSet(){const m=me();m.name=val('s-n')||m.name;m.city=val('s-c');m.emailOn=$('#s-eo').checked;m.email=val('s-em').trim();m.opt=[...document.querySelectorAll('[data-o]')].filter(x=>x.checked).map(x=>x.dataset.o);save()}
+function summary(d,ans){return `Adoption application for ${d.name}\n\n`+ans.map(([q,v])=>`${q}: ${v}`).join('\n')+'\n\nSent with Zyfauna'}
+
+document.addEventListener('input',e=>{const t=e.target;if(t.id==='pr'){$('#prv').textContent=t.value+' miles';return}
+ if(t.closest('[data-auto]')&&t.dataset.k){me().p[t.dataset.k]=t.value;save()}});
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.id==='pr'){db.pref.radius=+t.value}else if(t.id==='pc'){if(t.value==='My location')return;db.pref.city=t.value;delete db.pref.lat;delete db.pref.lon}else if(t.id==='ps'){db.pref.species=t.value}else return;
+ save();render()});
+
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,id=b.dataset.id,m=me();
+ if(a==='adopt'){if(!m){pending='#apply/'+id;toast('Log in or sign up to apply');location.hash='#login'}else if(m.role!=='adopter')toast('Shelter accounts can’t apply');else if(db.apps.some(x=>x.dogId===id&&x.adopterId===m.id)){toast('You already applied. Resubmit from My applications.');location.hash='#myapps'}else location.hash='#apply/'+id}
+ else if(a==='geo'){navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{db.pref.lat=p.coords.latitude;db.pref.lon=p.coords.longitude;save();render()},()=>toast('Couldn’t get your location. Pick a city instead.')):toast('Location isn’t available. Pick a city instead.')}
+ else if(a==='signup'){const n=val('su-n').trim(),em=val('su-e').trim().toLowerCase(),pw=val('su-p');
+  if(!n||!em.includes('@')||pw.length<6)return toast('Fill in every field. Password needs 6+ characters.');
+  if(LIVE){const{data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:{role:id,name:n,city:val('su-c')}}});if(error)return toast(error.message);
+   if(!data.session){toast('Check your email to confirm your account, then log in.');location.hash='#login';return}
+   try{await afterAuth()}catch(x){return toast('Couldn’t set up your account. Try logging in.')}
+   location.hash=id==='shelter'?'#settings':(pending||'#myinfo');pending=null;render();return}
+  if(db.users.some(u=>u.email===em))return toast('That email already has an account. Log in instead.');
+  const u={id:'u'+Date.now(),role:id,name:n,email:em,pass:pw,city:val('su-c')};
+  if(id==='shelter')Object.assign(u,{emailOn:false,opt:[],custom:[]});else u.p={name:n,email:em};
+  db.users.push(u);db.session=u.id;if(id==='adopter'){db.pref.city=u.city;delete db.pref.lat;delete db.pref.lon}save();
+  location.hash=id==='shelter'?'#settings':(pending||'#myinfo');pending=null;if(location.hash==='#settings'||true)render()}
+ else if(a==='login'){if(LIVE){const{error}=await sb.auth.signInWithPassword({email:val('li-e').trim().toLowerCase(),password:val('li-p')});if(error)return toast('Email or password is wrong.');
+   try{await afterAuth()}catch(x){return toast('Couldn’t load your account. Try again.')}
+   const w=me();location.hash=w.role==='shelter'?'#dash':(pending||'#dogs');pending=null;render();return}
+  const u=db.users.find(x=>x.pass&&x.email===val('li-e').trim().toLowerCase()&&x.pass===val('li-p'));
+  if(!u)return toast('Email or password is wrong.');db.session=u.id;if(u.role==='adopter'){db.pref.city=u.city;delete db.pref.lat;delete db.pref.lon}save();
+  location.hash=u.role==='shelter'?'#dash':(pending||'#dogs');pending=null;render()}
+ else if(a==='logout'){if(LIVE){await flush();await sb.auth.signOut();Object.assign(db,{users:[],dogs:[],apps:[],session:null});snap={};location.hash='#home';render();return}db.session=null;save();location.hash='#home';render()}
+ else if(a==='submitapp'){const d=dogOf(id),S=shel(d.shelterId),qs=qlist(S),v={};if((S.blocked||[]).includes(m.id))return toast('You can’t apply to this shelter.');
+  document.querySelectorAll('#appf [data-k]').forEach(x=>v[x.dataset.k]=x.value.trim());
+  const miss=qs.find(q=>isReq(q[0])&&!v[q[0]]);if(miss){toast('Please answer: '+miss[1]);const f=$(`#appf [data-k="${miss[0]}"]`);f&&f.focus();return}
+  qs.forEach(q=>{if(q[0][0]!=='c')m.p[q[0]]=v[q[0]]});
+  const ans=qs.map(q=>[q[1],v[q[0]]||'']),ap={id:'a'+Date.now(),dogId:d.id,shelterId:S.id,adopterId:m.id,ans,t:Date.now(),seen:false,emailed:false,status:'Pending',note:'',upd:false};
+  if(S.emailOn&&S.email){ap.emailed=true;const l=document.createElement('a');l.href=`mailto:${S.email}?subject=${encodeURIComponent('Adoption application for '+d.name)}&body=${encodeURIComponent(summary(d,ans))}`;l.click()}
+  const ex=b.dataset.app&&db.apps.find(z=>z.id===b.dataset.app&&z.adopterId===m.id);if(ex)Object.assign(ex,{ans,t:Date.now(),seen:false,status:'Pending',note:'',upd:false,resub:true,emailed:ap.emailed});else db.apps.push(ap);save();toast(ex?'Application resubmitted. Status: Pending':'Sent to '+S.name+'. Status: Pending');location.hash='#myapps'}
+ else if(a==='draft'){const n=val('n-n')||'This pet',g=[$('#n-k').checked&&'kids',$('#n-d').checked&&'other dogs',$('#n-c').checked&&'cats'].filter(Boolean);
+  $('#n-x').value=`${n} is a ${val('n-a')?val('n-a')+' old ':''}${val('n-s').toLowerCase()} ${val('n-b')||val('n-t').toLowerCase()}. ${g.length?n+' is good with '+g.join(', ')+'.':n+' is still being evaluated around other animals.'} ${n} is ready for a patient, loving home with time for walks, play, and plenty of affection.`}
+ else if(a==='savedog'){if(!val('n-n').trim()||!val('n-b').trim())return toast('Add a name and breed first.');if(LIVE&&!m.approved)return toast('Your account needs approval before you can post.');
+  db.dogs.push({id:'d'+Date.now(),shelterId:m.id,name:val('n-n').trim(),species:val('n-t'),breed:val('n-b').trim(),age:val('n-a'),size:val('n-s'),kids:$('#n-k').checked,dogs:$('#n-d').checked,cats:$('#n-c').checked,desc:val('n-x'),status:'available',t:Date.now()});save();toast('Listing posted');location.hash='#dash'}
+ else if(a==='dismiss'){const x=db.apps.find(z=>z.id===id);x.upd=false;save();render()}
+ else if(a==='block'){if(confirm('Block this person? They won’t be able to apply to your listings, and their applications will be hidden.')){m.blocked=m.blocked||[];if(!m.blocked.includes(id))m.blocked.push(id);const a0=db.apps.find(z=>z.adopterId===id);(m.bn=m.bn||{})[id]=a0?a0.ans[0][1]:'Unknown';save();toast('Blocked');render()}}
+ else if(a==='unblock'){collectSet();m.blocked=m.blocked.filter(x=>x!==id);save();render()}
+ else if(a==='decide'){const x=db.apps.find(z=>z.id===id);x.status=$('[data-ap="'+id+'"]').value;x.note=$('[data-an="'+id+'"]').value.trim();x.upd=true;save();toast('Saved. The adopter will see: '+x.status);render()}
+ else if(a==='status'){const d=dogOf(id);d.status=d.status==='adopted'?'available':'adopted';save();render()}
+ else if(a==='remove'){if(confirm('Remove this listing?')){db.dogs=db.dogs.filter(d=>d.id!==id);save();render()}}
+ else if(a==='saveset'){collectSet();toast('Settings saved')}
+ else if(a==='addq'){collectSet();const q=val('s-q').trim();if(q){m.custom.push(q);save()}render()}
+ else if(a==='delq'){collectSet();m.custom.splice(+id,1);save();render()}});
+if(LIVE){$('footer').textContent='Your account and listings are stored securely online.';
+ sb.auth.getSession().then(async({data})=>{if(data.session)try{await afterAuth()}catch(e){toast('Couldn’t load your data.')}render()});addEventListener('focus',refresh)}else render();
+</script>
+</body>
+</html>
